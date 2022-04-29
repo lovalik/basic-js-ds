@@ -22,9 +22,79 @@ const { NotImplementedError } = require('../extensions/index.js');
  *   }
  * }
  */
-function removeKFromList(/* l, k */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function removeKFromList( l, k ) {
+  // throw new NotImplementedError('Not implemented');
+  let newObject = [];
+
+  if( Array.isArray( l ) ){
+    l.map( ( item ) => {
+      if( item === k ) {
+        return
+      } else {
+        return newObject.push( item )
+      }
+    }, [])
+  }
+
+  if( typeof l === "object" ){
+    return newObject = deleteElem( l );
+  }
+
+  function deleteElem( obj ){
+    if( obj.next === null && checkIsMatch( obj.value ) ){
+      return { value: null, next: null }
+    } else if( obj.next === null && !checkIsMatch( obj.value ) ){
+      return obj
+    } else {
+      if( obj.value === k ){
+        obj = recursive( obj.next )
+      } else {
+        obj.next = recursive( obj.next )
+      }
+      
+      return obj;
+    }
+  }
+
+  function recursive( obj ){
+    const newObj = {}
+
+    if( obj === null ){
+      return
+    }
+
+    if( obj.next === null && !checkIsMatch( obj.value ) ){
+      return obj
+    } else if( obj.next === null && checkIsMatch( obj.value ) ){
+      return null
+    } else if( obj.next !== null && !checkIsMatch( obj.value ) ){
+      // newObj.value = obj.value;
+      // newObj.next = obj.next;
+      // newObj.next = recursive( newObj.next )
+      // return newObj
+      obj.next = recursive( obj.next )
+      return obj
+    } else if( obj.next !== null && checkIsMatch( obj.value ) ){
+      // newObj.value = obj.next.value;
+      // newObj.next = obj.next.next;
+      // obj = recursive( newObj )
+      // return obj
+      obj.value = obj.next.value;
+      obj.next = obj.next.next;
+      obj = recursive( obj )
+      return obj
+    }
+  }
+
+  function checkIsMatch( value ){
+    if( value === k ){
+      return true;
+    } else {
+      return false
+    }
+  }
+
+  return newObject
 }
 
 module.exports = {
